@@ -70,7 +70,11 @@ export default function SubmitProposalModal({ navigation }) {
         <View style={{ width: 38 }} />
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + 30, 48) }}>
+      <ScrollView 
+        style={styles.scrollView} 
+        showsVerticalScrollIndicator={false} 
+        contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + 30, 48), width: '100%', maxWidth: 720, alignSelf: 'center' }}
+      >
         <View style={[styles.formCard, { backgroundColor: theme.surface, borderColor: theme.border }]}>
           <Text style={[styles.inputLabel, { color: theme.textLight }]}>Research Project Title *</Text>
           <TextInput

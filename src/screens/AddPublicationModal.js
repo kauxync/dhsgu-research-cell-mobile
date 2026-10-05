@@ -100,7 +100,11 @@ export default function AddPublicationModal({ navigation }) {
         <View style={{ width: 38 }} />
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + 30, 48) }}>
+      <ScrollView 
+        style={styles.scrollView} 
+        showsVerticalScrollIndicator={false} 
+        contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + 30, 48), width: '100%', maxWidth: 720, alignSelf: 'center' }}
+      >
         {/* Entry Switcher */}
         <View style={[styles.entrySwitcher, { backgroundColor: theme.surface, borderColor: theme.border }]}>
           <TouchableOpacity 

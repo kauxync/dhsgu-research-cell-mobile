@@ -375,6 +375,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 40,
     paddingBottom: 40,
+    width: '100%',
+    maxWidth: 580,
+    alignSelf: 'center',
   },
   brandHeader: {
     alignItems: 'center',

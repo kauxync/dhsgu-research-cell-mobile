@@ -21,6 +21,7 @@ import {
 import AppNavigator from './src/navigation/AppNavigator';
 import { AuthProvider } from './src/context/AuthContext';
 import { ThemeProvider } from './src/context/ThemeContext';
+import WebResponsiveWrapper from './src/components/WebResponsiveWrapper';
 import { COLORS } from './src/theme/colors';
 
 export default function App() {
@@ -48,10 +49,12 @@ export default function App() {
     <SafeAreaProvider>
       <ThemeProvider>
         <AuthProvider>
-          <NavigationContainer>
-            <StatusBar style="light" />
-            <AppNavigator />
-          </NavigationContainer>
+          <WebResponsiveWrapper>
+            <NavigationContainer>
+              <StatusBar style="light" />
+              <AppNavigator />
+            </NavigationContainer>
+          </WebResponsiveWrapper>
         </AuthProvider>
       </ThemeProvider>
     </SafeAreaProvider>

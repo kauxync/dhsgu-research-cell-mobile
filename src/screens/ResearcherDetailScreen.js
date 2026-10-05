@@ -65,7 +65,11 @@ export default function ResearcherDetailScreen({ route, navigation }) {
         <View style={{ width: 40 }} />
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + 24, 40) }}>
+      <ScrollView 
+        style={styles.scrollView} 
+        showsVerticalScrollIndicator={false} 
+        contentContainerStyle={{ paddingBottom: Math.max(insets.bottom + 24, 40), width: '100%', maxWidth: 880, alignSelf: 'center' }}
+      >
         {/* Luxury Profile Header Card */}
         <View style={[styles.profileHeaderCard, { backgroundColor: theme.surface, borderColor: theme.border }]}>
           <View style={styles.avatarWrapper}>

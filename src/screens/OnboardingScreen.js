@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../theme/colors';
@@ -14,8 +15,6 @@ import { FONTS } from '../theme/fonts';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import UniversityLogo from '../components/UniversityLogo';
-
-const { width } = Dimensions.get('window');
 
 const SLIDES = [
   {
@@ -45,14 +44,18 @@ const SLIDES = [
 
 export default function OnboardingScreen({ navigation }) {
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const [containerWidth, setContainerWidth] = useState(width);
   const [currentIndex, setCurrentIndex] = useState(0);
   const flatListRef = useRef(null);
   const { completeOnboarding } = useAuth();
   const { theme, isDark } = useTheme();
 
+  const activeWidth = containerWidth > 0 ? containerWidth : width;
+
   const handleNext = () => {
     if (currentIndex < SLIDES.length - 1) {
-      flatListRef.current?.scrollToIndex({ index: currentIndex + 1 });
+      flatListRef.current?.scrollToIndex({ index: currentIndex + 1, animated: true });
       setCurrentIndex(currentIndex + 1);
     } else {
       handleFinish();
@@ -64,28 +67,33 @@ export default function OnboardingScreen({ navigation }) {
   };
 
   const renderSlide = ({ item }) => (
-    <View style={styles.slide}>
-      {item.isLogo ? (
-        <View style={styles.logoCircle}>
-          <UniversityLogo size={84} color={COLORS.gold} />
-        </View>
-      ) : (
-        <View style={[styles.iconCircle, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)', borderColor: isDark ? 'rgba(212, 175, 55, 0.3)' : 'rgba(212, 175, 55, 0.4)' }]}>
-          <Ionicons name={item.icon} size={48} color={item.iconColor} />
-        </View>
-      )}
+    <View style={[styles.slide, { width: activeWidth }]}>
+      <View style={styles.slideContent}>
+        {item.isLogo ? (
+          <View style={styles.logoCircle}>
+            <UniversityLogo size={84} color={COLORS.gold} />
+          </View>
+        ) : (
+          <View style={[styles.iconCircle, { backgroundColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)', borderColor: isDark ? 'rgba(212, 175, 55, 0.3)' : 'rgba(212, 175, 55, 0.4)' }]}>
+            <Ionicons name={item.icon} size={48} color={item.iconColor} />
+          </View>
+        )}
 
-      <View style={styles.badgePill}>
-        <Text style={styles.badgeText}>{item.badge}</Text>
+        <View style={styles.badgePill}>
+          <Text style={styles.badgeText}>{item.badge}</Text>
+        </View>
+
+        <Text style={[styles.title, { color: theme.textPrimary }]}>{item.title}</Text>
+        <Text style={[styles.description, { color: theme.textSecondary }]}>{item.description}</Text>
       </View>
-
-      <Text style={[styles.title, { color: theme.textPrimary }]}>{item.title}</Text>
-      <Text style={[styles.description, { color: theme.textSecondary }]}>{item.description}</Text>
     </View>
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background, paddingTop: Math.max(insets.top + 4, 16) }]}>
+    <View 
+      style={[styles.container, { backgroundColor: theme.background, paddingTop: Math.max(insets.top + 4, 16) }]}
+      onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
+    >
       {/* Top Bar with Skip */}
       <View style={styles.topBar}>
         <Text style={styles.brandTitle}>DHSGSU R&D</Text>
@@ -104,8 +112,13 @@ export default function OnboardingScreen({ navigation }) {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         style={styles.flatList}
+        getItemLayout={(_, index) => ({
+          length: activeWidth,
+          offset: activeWidth * index,
+          index,
+        })}
         onMomentumScrollEnd={(ev) => {
-          const index = Math.round(ev.nativeEvent.contentOffset.x / width);
+          const index = Math.round(ev.nativeEvent.contentOffset.x / activeWidth);
           setCurrentIndex(index);
         }}
       />
@@ -163,11 +176,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   slide: {
-    width,
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 28,
     paddingVertical: 12,
+  },
+  slideContent: {
+    width: '100%',
+    maxWidth: 540,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   logoCircle: {
     marginBottom: 20,
@@ -214,6 +232,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     paddingHorizontal: 24,
+    width: '100%',
+    maxWidth: 540,
+    alignSelf: 'center',
   },
   paginationRow: {
     flexDirection: 'row',
