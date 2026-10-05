@@ -4,9 +4,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../theme/colors';
 import { FONTS } from '../theme/fonts';
 import { useTheme } from '../context/ThemeContext';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import UniversityLogo from '../components/UniversityLogo';
 
 export default function SplashScreen() {
+  const insets = useSafeAreaInsets();
   const { theme } = useTheme();
 
   return (
@@ -28,7 +30,7 @@ export default function SplashScreen() {
         DCSA • PHYSICS • MATHEMATICS • CHEMISTRY • BOTANY
       </Text>
 
-      <View style={styles.loaderContainer}>
+      <View style={[styles.loaderContainer, { bottom: Math.max(insets.bottom + 24, 40) }]}>
         <ActivityIndicator size="small" color={COLORS.gold} />
         <Text style={[styles.loadingText, { color: theme.textMuted }]}>Initializing Research Ecosystem...</Text>
       </View>

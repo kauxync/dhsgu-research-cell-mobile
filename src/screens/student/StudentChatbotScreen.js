@@ -18,6 +18,7 @@ import { COLORS } from '../../theme/colors';
 import { FONTS } from '../../theme/fonts';
 import Header from '../../components/Header';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { api } from '../../api/client';
 
