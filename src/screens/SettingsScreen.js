@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  Platform,
   Switch,
   ActivityIndicator,
   Modal,
@@ -265,14 +266,20 @@ export default function SettingsScreen({ navigation }) {
           style={styles.logoutBtn} 
           activeOpacity={0.8}
           onPress={() => {
-            Alert.alert(
-              'Sign Out',
-              'Are you sure you want to log out of your DHSGSU portal account?',
-              [
-                { text: 'Cancel', style: 'cancel' },
-                { text: 'Log Out', style: 'destructive', onPress: logout }
-              ]
-            );
+            if (Platform.OS === 'web') {
+              if (window.confirm('Are you sure you want to log out of your DHSGSU portal account?')) {
+                logout();
+              }
+            } else {
+              Alert.alert(
+                'Sign Out',
+                'Are you sure you want to log out of your DHSGSU portal account?',
+                [
+                  { text: 'Cancel', style: 'cancel' },
+                  { text: 'Log Out', style: 'destructive', onPress: logout }
+                ]
+              );
+            }
           }}
         >
           <Ionicons name="log-out-outline" size={18} color="#EF4444" style={{ marginRight: 6 }} />
